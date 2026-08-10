@@ -3,7 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .kotlin
-
+repuestos_app
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
