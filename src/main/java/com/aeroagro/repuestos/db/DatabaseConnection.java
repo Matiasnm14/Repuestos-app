@@ -75,4 +75,15 @@ public class DatabaseConnection {
             throw new RuntimeException("Error al inicializar las tablas en la base de datos", e);
         }
     }
+
+    public static void cerrarConexion() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+                connection = null;
+            }
+        } catch (Exception e) {
+            System.err.println("Error al cerrar la conexión: " + e.getMessage());
+        }
+    }
 }

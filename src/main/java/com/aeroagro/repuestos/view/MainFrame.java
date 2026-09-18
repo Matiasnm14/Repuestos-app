@@ -3,6 +3,7 @@ package com.aeroagro.repuestos.view;
 
 
 import com.aeroagro.repuestos.controller.AvionController;
+import com.aeroagro.repuestos.controller.BackupService;
 import com.aeroagro.repuestos.controller.RepuestoController;
 import com.aeroagro.repuestos.controller.TipoRepuestoController;
 import com.aeroagro.repuestos.model.entity.Avion;
@@ -94,6 +95,21 @@ public class MainFrame extends JFrame {
                 new NuevoTipoRepuestoDialog(this, tipoController, this::cargarTiposRepuesto).setVisible(true)
         );
 
+        JButton btnBackup = new JButton("💾 Crear Backup");
+        btnBackup.addActionListener(e -> BackupService.realizarCopiaSeguridad(this));
+
+        JButton btnRestaurar = new JButton("📂 Cargar Backup");
+        btnRestaurar.addActionListener(e -> BackupService.restaurarCopiaSeguridad(this, () -> {
+            cargarAviones();
+            cargarTiposRepuesto();
+            if (tableModel != null) {
+                tableModel.setRowCount(0);
+            }
+            avionSeleccionado = null;
+        }));
+
+
+
         txtBuscar = new JTextField(20);
         // Filtrar en tiempo real al escribir en el buscador
         txtBuscar.getDocument().addDocumentListener(new DocumentListener() {
@@ -107,6 +123,8 @@ public class MainFrame extends JFrame {
         topFilterPanel.add(comboFiltroTipo);
         topFilterPanel.add(btnNuevoTipo);
         topFilterPanel.add(new JSeparator(JSeparator.VERTICAL));
+        topFilterPanel.add(btnBackup);
+        topFilterPanel.add(btnRestaurar);
 //        topFilterPanel.add(new JLabel("Buscar (N° Serie/Parte):"));
 //        topFilterPanel.add(txtBuscar);
 
