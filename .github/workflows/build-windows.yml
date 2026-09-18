@@ -2,6 +2,18 @@ name: Build Windows EXE
 
 on:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Tag existente a publicar como Release (ej. v1.0.0)"
+        required: false
+        type: string
+
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
 
 jobs:
   build-windows:
@@ -18,6 +30,31 @@ jobs:
           java-version: "21"
           cache: maven
 
+      - name: Resolver versión
+        shell: powershell
+        run: |
+          if ("${{ github.ref_type }}" -eq "tag") {
+            $tag = "${{ github.ref_name }}"
+          } else {
+            $tag = "${{ inputs.release_tag }}"
+          }
+
+          if ([string]::IsNullOrWhiteSpace($tag)) {
+            $version = "1.0.0"
+            $isRelease = "false"
+          } else {
+            if ($tag -notmatch '^v\d+\.\d+\.\d+$') {
+              throw "El tag debe ser como v1.0.0"
+            }
+
+            $version = $tag.Substring(1)
+            $isRelease = "true"
+          }
+
+          "APP_VERSION=$version" >> $env:GITHUB_ENV
+          "RELEASE_TAG=$tag" >> $env:GITHUB_ENV
+          "IS_RELEASE=$isRelease" >> $env:GITHUB_ENV
+
       - name: Mostrar versiones
         shell: powershell
         run: |
@@ -25,14 +62,16 @@ jobs:
           mvn --version
           jpackage --version
 
-      - name: Compilar proyecto con Maven
+      - name: Compilar con Maven
         run: mvn --batch-mode clean package
 
-      - name: Preparar archivos para jpackage
+      - name: Preparar archivos
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path input
-          Copy-Item "target/Repuestos-app-jar-with-dependencies.jar" "input/Repuestos-app-jar-with-dependencies.jar"
+          Copy-Item `
+            "target/Repuestos-app-jar-with-dependencies.jar" `
+            "input/Repuestos-app-jar-with-dependencies.jar"
 
       - name: Crear instalador EXE
         shell: powershell
@@ -42,21 +81,39 @@ jobs:
             --name "RepuestosApp" `
             --input input `
             --dest output `
+            --icon "resources/icono.ico" `
             --main-jar "Repuestos-app-jar-with-dependencies.jar" `
             --main-class "com.aeroagro.repuestos.Main" `
-            --app-version "1.0.0" `
+            --app-version "$env:APP_VERSION" `
             --vendor "Matiasnm14" `
             --win-dir-chooser `
             --win-shortcut `
             --win-menu
 
-      - name: Mostrar archivos generados
+      - name: Renombrar instalador
         shell: powershell
         run: |
-          Get-ChildItem -Recurse output
+          $exe = Get-ChildItem "output/*.exe" | Select-Object -First 1
 
-      - name: Subir instalador
+          if (-not $exe) {
+            throw "No se encontró el instalador generado."
+          }
+
+          Rename-Item `
+            -Path $exe.FullName `
+            -NewName "RepuestosApp-$env:APP_VERSION-Windows.exe"
+
+      - name: Subir instalador como Artifact
         uses: actions/upload-artifact@v7
         with:
-          name: RepuestosApp-Windows
+          name: RepuestosApp-Windows-${{ env.APP_VERSION }}
           path: output/*.exe
+
+      - name: Crear GitHub Release
+        if: env.IS_RELEASE == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: RepuestosApp ${{ env.RELEASE_TAG }}
+          generate_release_notes: true
+          files: output/*.exe
