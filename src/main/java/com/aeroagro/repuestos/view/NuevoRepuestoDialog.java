@@ -104,7 +104,9 @@ public class NuevoRepuestoDialog extends JDialog {
     private String guardarImagenLocalmente(File archivoOrigen) throws IOException {
         if (archivoOrigen == null) return null;
 
-        File directorioDestino = new File("./repuestos_app/imagenes_repuestos");
+        String userHome = System.getProperty("user.home");
+        File directorioDestino = new File(userHome + File.separator + ".repuestos_app" + File.separator + "imagenes_repuestos");
+
         if (!directorioDestino.exists()) {
             directorioDestino.mkdirs();
         }
@@ -113,6 +115,7 @@ public class NuevoRepuestoDialog extends JDialog {
         File destino = new File(directorioDestino, nombreArchivo);
 
         Files.copy(archivoOrigen.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        return destino.getPath();
+
+        return destino.getAbsolutePath();
     }
 }
