@@ -637,7 +637,3 @@ Algunas funcionalidades que podrían incorporarse en futuras versiones:
 * Pruebas unitarias y de integración.
 
 ---
-
-## 👨‍💻 Desarrollo
-
-Proyecto desarrollado como una aplicación Java de escritorio enfocada en facilitar el control y trazabilidad de **repuestos asociados a aeronaves**, utilizando una arquitectura simple, almacenamiento local y una interfaz gráfica basada en Swing.
