@@ -311,13 +311,42 @@ Ejemplo:
 
 Esto evita depender de IDs numéricos autoincrementales y permite generar identificadores únicos desde la aplicación.
 
----
-
 ## 🚀 Instalación
 
-### Requisitos
+La aplicación puede instalarse directamente en **Windows** utilizando el instalador disponible en GitHub Releases.
 
-Antes de ejecutar el proyecto se necesita:
+### 🪟 Instalación en Windows
+
+1. Ir a la sección **Releases** del repositorio.
+2. Descargar la versión más reciente del instalador:
+
+```text
+RepuestosApp-X.X.X-Windows.exe
+```
+
+Por ejemplo:
+
+```text
+RepuestosApp-1.0.0-Windows.exe
+```
+
+3. Ejecutar el archivo `.exe`.
+4. Seleccionar el directorio donde se desea instalar la aplicación.
+5. Completar el proceso de instalación.
+6. Ejecutar **RepuestosApp** desde el acceso directo o desde el menú Inicio.
+
+> **No es necesario instalar Java, Maven ni SQLite manualmente.**
+> El instalador incluye el entorno de ejecución Java necesario para ejecutar la aplicación.
+
+---
+
+### 🧑‍💻 Ejecutar desde el código fuente
+
+Esta opción está destinada principalmente a desarrolladores que quieran modificar, compilar o contribuir al proyecto.
+
+#### Requisitos
+
+Se necesita:
 
 * Java JDK 21 o superior.
 * Apache Maven.
@@ -335,9 +364,13 @@ Comprobar Maven:
 mvn --version
 ```
 
----
+Comprobar Git:
 
-## 📥 Clonar el repositorio
+```bash
+git --version
+```
+
+#### Clonar el repositorio
 
 ```bash
 git clone https://github.com/Matiasnm14/Repuestos-app.git
@@ -349,59 +382,46 @@ Entrar al proyecto:
 cd Repuestos-app
 ```
 
----
-
-## 🔨 Compilar
-
-Ejecutar:
+#### Compilar
 
 ```bash
 mvn clean package
 ```
 
-Maven descargará automáticamente las dependencias necesarias y generará el proyecto dentro del directorio:
-
-```text
-target/
-```
-
-El proyecto utiliza `maven-assembly-plugin` para incluir las dependencias dentro del JAR.
-
-El archivo generado será similar a:
+El proceso generará el archivo ejecutable Java:
 
 ```text
 target/Repuestos-app-jar-with-dependencies.jar
 ```
 
----
-
-## ▶️ Ejecutar
-
-Después de compilar:
+#### Ejecutar
 
 ```bash
 java -jar target/Repuestos-app-jar-with-dependencies.jar
 ```
 
-La clase principal configurada en Maven es:
-
-```text
-com.aeroagro.repuestos.Main
-```
-
-También puede ejecutarse directamente desde un IDE como:
-
-* IntelliJ IDEA
-* Eclipse
-* VS Code con Java Extension Pack
-
-Ejecutando:
-
-```text
-Main.java
-```
-
 ---
+
+### 📦 Versiones
+
+Los instaladores para Windows se generan automáticamente mediante **GitHub Actions** cada vez que se publica una nueva versión del proyecto.
+
+Las versiones siguen el formato:
+
+```text
+vMAJOR.MINOR.PATCH
+```
+
+Por ejemplo:
+
+```text
+v1.0.0
+v1.1.0
+v2.0.0
+```
+
+Cada Release incluye el instalador correspondiente para Windows.
+
 
 ## 🖥️ Uso de la aplicación
 
@@ -614,7 +634,6 @@ Algunas funcionalidades que podrían incorporarse en futuras versiones:
 * Almacenamiento de documentos técnicos.
 * Sincronización con una base de datos remota.
 * Sistema de roles y permisos.
-* Instalador para Windows/Linux.
 * Pruebas unitarias y de integración.
 
 ---
