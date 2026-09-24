@@ -81,7 +81,7 @@ jobs:
             --name "RepuestosApp" `
             --input input `
             --dest output `
-            --icon "resources/icono.ico" `
+            --icon "src/main/resources/icono.ico" `
             --main-jar "Repuestos-app-jar-with-dependencies.jar" `
             --main-class "com.aeroagro.repuestos.Main" `
             --app-version "$env:APP_VERSION" `

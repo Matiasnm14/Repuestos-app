@@ -35,7 +35,7 @@ Maven genera el JAR con dependencias durante la fase `package`. La base de datos
 
 Si la versión publicada incluye un instalador, puede descargarse desde [Releases](https://github.com/Matiasnm14/Repuestos-app/releases) y ejecutarse directamente. El instalador generado con `jpackage` incluye un entorno de ejecución de Java.
 
-El flujo de GitHub Actions está configurado para generar un instalador `RepuestosApp-<versión>-Windows.exe` al publicar una etiqueta `vMAJOR.MINOR.PATCH` o al iniciarlo manualmente. Antes de generar un nuevo instalador, debe corregirse la ruta del icono en [`.github/workflows/build-windows.yml`](.github/workflows/build-windows.yml): el flujo usa `resources/icono.ico`, pero el archivo del proyecto está en `src/main/resources/icono.ico`.
+El flujo de GitHub Actions genera un instalador `RepuestosApp-<versión>-Windows.exe` al publicar una etiqueta `vMAJOR.MINOR.PATCH` o al iniciarlo manualmente. Usa el icono de `src/main/resources/icono.ico` para el instalador de Windows.
 
 ## Uso básico
 
